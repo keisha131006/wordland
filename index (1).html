@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wordland — Belajar Bahasa Inggris</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --periwinkle:#c9c2f7;
+    --periwinkle-deep:#7b6fe0;
+    --pink:#fbd3e2;
+    --pink-deep:#f291bd;
+    --cream:#fffaf6;
+    --ink:#463b66;
+    --ink-soft:#8579a8;
+    --white:#ffffff;
+    box-sizing:border-box;
+  }
+  *{box-sizing:inherit;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:'Quicksand',sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 12% 18%, var(--pink) 0 10px, transparent 11px),
+      radial-gradient(circle at 38% 62%, var(--periwinkle) 0 7px, transparent 8px),
+      radial-gradient(circle at 68% 22%, var(--pink) 0 6px, transparent 7px),
+      radial-gradient(circle at 85% 70%, var(--periwinkle) 0 9px, transparent 10px),
+      radial-gradient(circle at 22% 85%, var(--pink-deep) 0 5px, transparent 6px),
+      radial-gradient(circle at 55% 8%, var(--periwinkle-deep) 0 4px, transparent 5px),
+      linear-gradient(160deg, var(--cream), #fdf4f9 60%, var(--cream));
+    background-size:180px 180px,220px 220px,160px 160px,240px 240px,200px 200px,190px 190px,100% 100%;
+    min-height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px 18px;
+    padding-top:calc(32px + env(safe-area-inset-top,0px));
+    padding-bottom:calc(32px + env(safe-area-inset-bottom,0px));
+  }
+  h1,h2,.logo{font-family:'Fredoka',sans-serif;}
+  .stage{width:100%;max-width:460px;}
+  .view{display:none;}
+  .view.active{display:block;animation:pop .45s ease;}
+  @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98);}to{opacity:1;transform:translateY(0) scale(1);}}
+  .card{
+    background:var(--white);
+    border-radius:28px;
+    padding:38px 32px;
+    box-shadow:0 18px 40px -18px rgba(123,111,224,.35);
+    border:3px dashed var(--periwinkle);
+    position:relative;
+  }
+  .dotcap{
+    width:54px;height:54px;border-radius:50%;
+    background:linear-gradient(135deg,var(--periwinkle-deep),var(--pink-deep));
+    display:flex;align-items:center;justify-content:center;
+    font-size:26px;margin:0 auto 14px;
+    box-shadow:0 8px 18px -8px rgba(123,111,224,.6);
+  }
+  .logo{text-align:center;font-size:1.7rem;font-weight:600;color:var(--periwinkle-deep);letter-spacing:.3px;}
+  .tagline{text-align:center;color:var(--ink-soft);font-size:.95rem;margin-top:6px;margin-bottom:26px;}
+  label{display:block;font-weight:700;font-size:.85rem;margin-bottom:6px;color:var(--ink);}
+  .field{margin-bottom:18px;}
+  input[type=text],input[type=password]{
+    width:100%;padding:12px 16px;border-radius:16px;border:2px solid var(--periwinkle);
+    font-family:inherit;font-size:1rem;background:#fbfaff;color:var(--ink);outline:none;
+    transition:border-color .2s, box-shadow .2s;
+  }
+  input:focus{border-color:var(--pink-deep);box-shadow:0 0 0 4px rgba(242,145,189,.18);}
+  .btn{
+    width:100%;padding:13px 18px;border:none;border-radius:18px;
+    font-family:'Fredoka',sans-serif;font-size:1.05rem;font-weight:600;color:var(--white);
+    background:linear-gradient(135deg,var(--periwinkle-deep),var(--pink-deep));
+    cursor:pointer;box-shadow:0 10px 22px -10px rgba(123,111,224,.55);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 26px -10px rgba(123,111,224,.6);}
+  .btn:active{transform:translateY(0);}
+  .btn.ghost{
+    background:transparent;color:var(--periwinkle-deep);border:2px solid var(--periwinkle);
+    box-shadow:none;
+  }
+  .btn.ghost:hover{background:rgba(201,194,247,.25);}
+  .hint{text-align:center;font-size:.8rem;color:var(--ink-soft);margin-top:16px;}
+  .error{color:#d1548c;font-size:.85rem;margin-top:-8px;margin-bottom:14px;min-height:1em;}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;}
+  .pill{
+    font-size:.78rem;font-weight:700;color:var(--periwinkle-deep);
+    background:var(--periwinkle);padding:6px 14px;border-radius:999px;
+  }
+  .link-btn{
+    background:none;border:none;color:var(--ink-soft);font-family:inherit;font-weight:700;
+    font-size:.82rem;cursor:pointer;text-decoration:underline;text-underline-offset:3px;
+  }
+  .link-btn:hover{color:var(--pink-deep);}
+  h1.greeting{font-size:1.7rem;color:var(--ink);line-height:1.25;margin-bottom:6px;}
+  .sub{color:var(--ink-soft);margin-bottom:22px;font-size:.95rem;}
+  .word-card{
+    background:linear-gradient(135deg,#fdf1f6,#f3f1fd);
+    border-radius:20px;padding:18px 20px;margin-bottom:22px;
+    border:2px solid var(--pink);
+  }
+  .word-card .label{font-size:.75rem;font-weight:700;color:var(--pink-deep);margin-bottom:4px;}
+  .word-card .word{font-family:'Fredoka',sans-serif;font-size:1.3rem;color:var(--periwinkle-deep);}
+  .word-card .mean{font-size:.9rem;color:var(--ink-soft);margin-top:2px;}
+  .nav-row{display:flex;gap:12px;}
+  .nav-row .btn{flex:1;}
+  .about-list{margin:18px 0 24px;padding-left:0;list-style:none;}
+  .about-list li{
+    display:flex;gap:10px;align-items:flex-start;margin-bottom:12px;font-size:.93rem;color:var(--ink);
+  }
+  .about-list li::before{content:"✿";color:var(--pink-deep);flex-shrink:0;}
+  .toast{
+    position:fixed;top:calc(18px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%) translateY(-140%);
+    background:var(--periwinkle-deep);color:#fff;padding:10px 22px;border-radius:999px;
+    font-weight:700;font-size:.85rem;box-shadow:0 12px 24px -10px rgba(123,111,224,.5);
+    transition:transform .35s ease; z-index:10;
+  }
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  @media (prefers-color-scheme: dark){
+    body{filter:none;}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- LOGIN -->
+  <div class="view active" id="view-login">
+    <div class="card">
+      <div class="dotcap">🌸</div>
+      <div class="logo">Wordland</div>
+      <div class="tagline">Belajar Bahasa Inggris dengan ceria</div>
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="username">Nama pengguna</label>
+          <input type="text" id="username" placeholder="mis. Sari" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="password">Kata sandi</label>
+          <input type="password" id="password" placeholder="••••••••" autocomplete="off">
+        </div>
+        <div class="error" id="loginError"></div>
+        <button type="submit" class="btn">Masuk ke Wordland</button>
+      </form>
+      <div class="hint">Demo: isi nama & kata sandi apa saja untuk masuk ✨</div>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div class="view" id="view-home">
+    <div class="card">
+      <div class="topbar">
+        <span class="pill">Hi, <span id="homeName">Teman</span> 👋</span>
+        <button class="link-btn" id="logoutBtn">Keluar</button>
+      </div>
+      <h1 class="greeting">Hello! Welcome back to Wordland 🎈</h1>
+      <p class="sub">Senang bertemu lagi! Yuk lanjutkan petualangan bahasa Inggris-mu hari ini.</p>
+      <div class="word-card">
+        <div class="label">KOSAKATA HARI INI</div>
+        <div class="word">whimsical</div>
+        <div class="mean">(adj) unik dan menggemaskan — cara yang menyenangkan untuk menggambarkan Wordland!</div>
+      </div>
+      <div class="nav-row">
+        <button class="btn ghost" id="toAboutBtn">Tentang Wordland</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="view" id="view-about">
+    <div class="card">
+      <div class="topbar">
+        <span class="pill">Tentang</span>
+        <button class="link-btn" id="logoutBtn2">Keluar</button>
+      </div>
+      <h1 class="greeting">Tentang Wordland</h1>
+      <p class="sub">Wordland adalah ruang belajar Bahasa Inggris yang ceria, dibuat untuk tugas mata kuliah Multimedia Interaktif dengan fokus pada alur UI/UX yang sederhana dan menyenangkan.</p>
+      <ul class="about-list">
+        <li>Alur pengguna: Login → Home → About → Logout → kembali ke Login.</li>
+        <li>Tema visual: periwinkle & soft pink dengan motif polkadot yang whimsical.</li>
+        <li>Fokus mata kuliah: eksplorasi interaksi, transisi lembut, dan konsistensi UI.</li>
+      </ul>
+      <div class="nav-row">
+        <button class="btn ghost" id="toHomeBtn">Kembali ke Home</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast">Berhasil logout 🌷</div>
+
+<script>
+  const views = {
+    login: document.getElementById('view-login'),
+    home: document.getElementById('view-home'),
+    about: document.getElementById('view-about'),
+  };
+  const toast = document.getElementById('toast');
+
+  function showView(name){
+    Object.values(views).forEach(v => v.classList.remove('active'));
+    views[name].classList.add('active');
+  }
+  function flashToast(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(()=> toast.classList.remove('show'), 1800);
+  }
+
+  document.getElementById('loginForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const user = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value.trim();
+    const err = document.getElementById('loginError');
+    if(!user || !pass){
+      err.textContent = 'Isi nama pengguna dan kata sandi dulu, ya.';
+      return;
+    }
+    err.textContent = '';
+    document.getElementById('homeName').textContent = user;
+    showView('home');
+  });
+
+  document.getElementById('toAboutBtn').addEventListener('click', () => showView('about'));
+  document.getElementById('toHomeBtn').addEventListener('click', () => showView('home'));
+
+  function doLogout(){
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('loginError').textContent = '';
+    showView('login');
+    flashToast('Berhasil logout 🌷');
+  }
+  document.getElementById('logoutBtn').addEventListener('click', doLogout);
+  document.getElementById('logoutBtn2').addEventListener('click', doLogout);
+</script>
+</body>
+</html>
